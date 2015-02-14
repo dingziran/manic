@@ -8,6 +8,20 @@ var db=mysql.createConnection({
     password:'root',
     database:'manic'
 });
-module.export=function(){
-
+module.exports.insert=function(data){
+    var sql="INSERT INTO row_data (name,start,end,duration,process) values (?,?,?,?,?)";
+    db.query(sql,
+        [data.name,data.start,data.end,data.duration,data.process]
+        ,function(err){
+        if(err) throw err;
+    });
 };
+data={
+    name:"test",
+    start:new Date(),
+    end:new Date(),
+    duration:30,
+    process:"test process"
+};
+console.log(data);
+module.exports.insert(data);

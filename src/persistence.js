@@ -8,6 +8,36 @@ var db=mysql.createConnection({
     password:'root',
     database:'manic'
 });
-module.export=function(){
+db.connect(function(err) {
+    if (err) {
+        console.error('error connecting: ' + err.stack);
+        return;
+    }
 
+    console.log('connected as id ' + db.threadId);
+});
+module.exports.insert=function(table,data){
+    var sql="INSERT INTO ? SET ?";
+    db.query(sql,
+        [table,data]
+        ,function(err){
+        if(err) throw err;
+    });
 };
+module.exports.query=function(table,callback){
+    var sql="SELECT * from ?";
+    db.query(sql,table,function(err,results){
+        if(err) throw err;
+        callback(results.length);
+    })
+};
+//data={
+//    name:"test",
+//    start:new Date(),
+//    end:new Date(),
+//    duration:30,
+//    process:"test process"
+//};
+//console.log(data);
+//module.exports.insert(data);
+//module.exports.query();

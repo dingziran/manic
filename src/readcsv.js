@@ -5,15 +5,16 @@
 var fs = require('fs');
 var csv = require("fast-csv");
 //module.export.csvToObject("../ManicTimeData_2015-02-12.csv");
-module.export.csvToObject=function (path,f){
+module.exports.csvToObject=function (path,callback){
     csv.fromPath(path)
         .on("data", function(data){
-            f(data);
+            callback(data);
         })
         .on("end", function(){
-            console.log("done");
+            console.log("readcsv finish");
         });
-}
+
+};
 
 //fs.readFile('../ManicTimeData_2015-02-12.csv',function(err,data){
 //    if(err){

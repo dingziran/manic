@@ -6,7 +6,7 @@ var persistence=require("./persistence");
 module.exports.rawToDB=function(){
     readcsv.csvToObject("../data/ManicTimeData_2015-02-15.csv",function(data){
         if(data[0]=='Name'){
-            console.log("skip head");
+            console.log("Method(rawToDB): skip head");
             return;
         }
         var record={
@@ -16,7 +16,7 @@ module.exports.rawToDB=function(){
             duration:data[3],
             process:data[4]
         };
-        persistence.insert("row_data",record);
+        persistence.insert("raw_data",record);
         //for(var i= 1;i<data.length;i++){
         //    var record=data[i];
         //
@@ -30,4 +30,5 @@ module.exports.groupByProcess=function(){
         });
     })
 };
-//module.exports.rawToDB();
+persistence.init();
+module.exports.rawToDB();

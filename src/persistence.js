@@ -13,20 +13,35 @@ db.connect(function(err) {
         console.error('error connecting: ' + err.stack);
         return;
     }
-
-    console.log('connected as id ' + db.threadId);
+    console.log('DB connected as id ' + db.threadId);
 });
-module.exports.insert=function(table,data){
-    var sql="INSERT INTO ? SET ?";
-    db.query(sql,
-        [table,data]
-        ,function(err){
-        if(err) throw err;
-    });
+
+exports.init=function(){
+    var sql="CREATE TABLE IF NOT EXISTS raw_data("+
+        "id INT(11) NOT NULL AUTO_INCREMENT,"+
+        "name VARCHAR(1023),"+
+        "start DATETIME,"+
+        "end DATETIME,"+
+        "duration VARCHAR(255),"+
+        "process VARCHAR(255),"+
+        "PRIMARY KEY (id)"+
+        ") ENGINE=InnoDB AUTO_INCREMENT=1001";
+    db.query(sql,null,function(err){
+            if(err) throw err;
+        });
 };
-module.exports.query=function(table,callback){
-    var sql="SELECT * from ?";
-    db.query(sql,table,function(err,results){
+
+exports.insert=function(table,data){
+    var sql="INSERT INTO "+table+" SET ?";
+    db.query(sql,
+        data,
+        function(err){
+            if(err) throw err;
+        });
+};
+exports.query=function(table,callback){
+    var sql="SELECT * from "+table;
+    db.query(sql,null,function(err,results){
         if(err) throw err;
         callback(results.length);
     })
@@ -39,5 +54,5 @@ module.exports.query=function(table,callback){
 //    process:"test process"
 //};
 //console.log(data);
-//module.exports.insert(data);
+//module.exports.init();
 //module.exports.query();
